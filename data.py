@@ -22,7 +22,7 @@ class IndexSampler(sampler.Sampler):
         return self.num_samples
 
 
-def getImageNet(val = True):
+def getSTL10(val = True):
 
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
