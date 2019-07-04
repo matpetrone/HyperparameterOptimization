@@ -26,19 +26,19 @@ def getSTL10(val = True):
 
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-    trainSize = 100000
+    trainSize = 5000
     if val:
-        trainSize = 75000
-        valSize = 25000
+        trainSize = 5000
+        valSize = 4000
 
     trainset = torchvision.datasets.STL10(root='./data', split='train', download=True, transform=transform)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size= 60,shuffle=False, sampler=IndexSampler(trainSize, 0))
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size= 32,shuffle=False, sampler=IndexSampler(trainSize, 0))
 
     testset = torchvision.datasets.STL10(root="./data", split='test', download=True, transform=transform)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=60, shuffle=False)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=32, shuffle=False, sampler=IndexSampler(4000, 0))
 
     if val:
-        validationloader = torch.utils.data.DataLoader(trainset, batch_size=60, shuffle=False, sampler=IndexSampler(valSize, trainSize))
+        validationloader = torch.utils.data.DataLoader(testset, batch_size=60, shuffle=False, sampler=IndexSampler(valSize, 4000))
         return trainloader, validationloader, testloader
 
     return trainloader, testloader
