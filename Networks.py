@@ -7,7 +7,9 @@ from tensorboardX import SummaryWriter
 
 class Net(nn.Module):
 
+
     def __init__(self):
+        super(Net, self).__init__()
         self.conv1 = nn.Conv2d(3,16,3)
         self.conv2 = nn.Conv2d(16, 16,3)
         self.maxP1 = nn.MaxPool2d(2, 2)
@@ -28,12 +30,25 @@ class Net(nn.Module):
         x = self.fc3(x)
         return x
 
+    def weights_init(self, m):
+        if isinstance(m, nn.Conv2d):
+            m.reset_parameters()
+        if isinstance(m, nn.Linear):
+            torch.nn.init.xavier_uniform_(m.weight)
+            m.bias.data.fill_(0.01)
+        #net = nn.Sequential(nn.Linear(2, 2), nn.Linear(2, 2))
 
-def trainingNet(net, epochs, trainloader, learn_rate, momentum):
+    def init_w(self):
+        self.apply(self.weights_init)
+
+def trainingNet(net, epochs, trainloader, learn_rate, momentum, weight_decay):
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=learn_rate, momentum=momentum)
-
+    optimizer = optim.SGD(net.parameters(), lr=learn_rate, momentum=momentum,weight_decay=weight_decay)
+    net.init_w()
     for epoch in range(epochs):  # loop over the dataset multiple times
+        accuracy = 0.0
+        total = 0
+        correct = 0
 
         running_loss = 0.0
         for i, data in enumerate(trainloader, 0):
@@ -49,17 +64,28 @@ def trainingNet(net, epochs, trainloader, learn_rate, momentum):
             loss.backward()
             optimizer.step()
 
+            #Accuracy
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
             # print statistics
             running_loss += loss.item()
-            if i % 2000 == 1999:  # print every 2000 mini-batches
+            if i % 250 == 249:  # print every 2000 mini-batches
                 print('[%d, %5d] loss: %.3f' %
-                      (epoch + 1, i + 1, running_loss / 2000))
+                      (epoch + 1, i + 1, running_loss / 250))
+                print('Accuracy: %d %'%(100*correct/total))
+                runloss = running_loss / 250
                 running_loss = 0.0
+    final_accuracy = 100 * (correct / total)
+    return net, final_accuracy, runloss
 
 def valNet(net, validloader):
-
+    criterion = nn.CrossEntropyLoss()
     correct = 0
     total = 0
+    num_minibatch = 0
+    valid_loss = 0.0
     with torch.no_grad():
         for data in validloader:
             images, labels = data
@@ -67,7 +93,18 @@ def valNet(net, validloader):
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
+            loss = criterion(outputs, labels)
+            valid_losses = loss.item()
+            num_minibatch += 1
 
     accuracy = 100 * correct / total
-
+    valid_loss /= num_minibatch
     print('Accuracy of the network: %d %%' % (accuracy))
+    return net, accuracy, valid_loss
+
+
+def fit(net, epochs, trainloader, validloader, learn_rate, momentum, weight_decay):
+
+    trainedNet,_,_= trainingNet(net, epochs, trainloader, learn_rate, momentum, weight_decay)
+    validNet, validation_accuracy, validation_loss = valNet(trainedNet, validloader)
+    return validNet, validation_accuracy, validation_loss
