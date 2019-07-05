@@ -59,13 +59,14 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
         for i, data in enumerate(trainloader, 0):
             # get the inputs; data is a list of [inputs, labels]
             inputs, labels = data
+            labels = labels.to(device)
 
             # zero the parameter gradients
             optimizer.zero_grad()
 
             # forward + backward + optimize
             outputs = net(inputs.to(device))
-            loss = criterion(outputs, labels.to(device))
+            loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
 
@@ -112,11 +113,12 @@ def valNet(net, validloader, device='cpu'):
     with torch.no_grad():
         for data in validloader:
             images, labels = data
+            labels = labels.to(device)
             outputs = net(images.to(device))
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-            loss = criterion(outputs, labels.to(device))
+            loss = criterion(outputs, labels)
             valid_loss += loss.item()
             num_minibatch += 1
 
