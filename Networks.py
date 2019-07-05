@@ -86,7 +86,7 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
                 running_loss = 0.0
 
         # Save Metrics
-        _, validation_accuracy, validation_loss = valNet(net, validloader)
+        _, validation_accuracy, validation_loss = valNet(net, validloader, device)
         accuracy.append(validation_loss)
         train_loss /= num_minibatch
         train_accuracy = 100 * correct/total
@@ -113,11 +113,10 @@ def valNet(net, validloader, device='cpu'):
     with torch.no_grad():
         for data in validloader:
             images, labels = data
-            labels = labels.to(device)
             outputs = net(images.to(device))
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
-            correct += (predicted == labels).sum().item()
+            correct += (predicted.cpu() == labels).sum().item()
             loss = criterion(outputs, labels)
             valid_loss += loss.item()
             num_minibatch += 1
