@@ -4,7 +4,6 @@ import torch
 from torchvision import transforms
 
 
-
 class IndexSampler(sampler.Sampler):
     """Samples elements sequentially from some offset.
     Arguments:
@@ -22,7 +21,7 @@ class IndexSampler(sampler.Sampler):
         return self.num_samples
 
 
-def getSTL10(val = True):
+def getSTL10(val=True):
 
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
