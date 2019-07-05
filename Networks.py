@@ -65,7 +65,7 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
 
             # forward + backward + optimize
             outputs = net(inputs.to(device))
-            loss = criterion(outputs, labels)
+            loss = criterion(outputs, labels.to(device))
             loss.backward()
             optimizer.step()
 
@@ -116,7 +116,7 @@ def valNet(net, validloader, device='cpu'):
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-            loss = criterion(outputs, labels)
+            loss = criterion(outputs, labels.to(device))
             valid_loss += loss.item()
             num_minibatch += 1
 
