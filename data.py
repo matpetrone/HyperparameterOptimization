@@ -37,7 +37,7 @@ def getSTL10(val=True):
     testloader = torch.utils.data.DataLoader(testset, batch_size=32, shuffle=False, sampler=IndexSampler(4000, 0))
 
     if val:
-        validationloader = torch.utils.data.DataLoader(testset, batch_size=60, shuffle=False, sampler=IndexSampler(valSize, 4000))
+        validationloader = torch.utils.data.DataLoader(testset, batch_size=32, shuffle=False, sampler=IndexSampler(valSize, 4000))
         return trainloader, validationloader, testloader
 
     return trainloader, testloader

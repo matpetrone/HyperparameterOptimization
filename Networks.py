@@ -44,7 +44,7 @@ class Net(nn.Module):
 
 def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_decay, device='cpu'):
     criterion = nn.CrossEntropyLoss()
-    optimizer = AdamW(net.parameters(), lr=learn_rate, weight_decay=weight_decay)
+    optimizer = optim.SGD(net.parameters(), lr=learn_rate, weight_decay=weight_decay)
     net.init_w()
     net.train()
     tensorboard = SummaryWriter('runs/' + 'lr=' + str(learn_rate) + ',wd=' + str(weight_decay))

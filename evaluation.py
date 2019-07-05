@@ -9,11 +9,12 @@ trainloader, validloader, _ = getSTL10(True)
 
 
 def evaluateBayes(learning_rate, weight_decay):
-    device = torch.device("cuda:5" if torch.cuda.is_available() else "cpu")
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     model = Net().to(device)
 
-    _, validation_loss = train_eval_Net(model, 10, trainloader, validloader, learning_rate, weight_decay, device)
+    _, validation_loss = train_eval_Net(model, 30, trainloader, validloader, learning_rate, weight_decay, device)
 
     return -validation_loss
 
