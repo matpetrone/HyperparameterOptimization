@@ -7,6 +7,7 @@ from data import getSTL10
 hyperpar_domains = {'learning_rate': (0.00001, 0.1), 'weight_decay': (0, 0.001)}
 trainloader, validloader, _ = getSTL10(True)
 
+post_train_losses = []
 
 def evaluateBayes(learning_rate, weight_decay):
 
@@ -16,6 +17,8 @@ def evaluateBayes(learning_rate, weight_decay):
 
     _, validation_loss = train_eval_Net(model, 30, trainloader, validloader, learning_rate, weight_decay, device)
 
+    post_train_losses.append(validation_loss)
+
     return -validation_loss
 
 
@@ -23,3 +26,4 @@ def evaluateBayes(learning_rate, weight_decay):
 opt_bys = BayesianOptimization(f=evaluateBayes, pbounds=hyperpar_domains)
 opt_bys.maximize(3, 20)
 print('Result with Bayes Optimizer:'+str(opt_bys.max))
+print(post_train_losses)
