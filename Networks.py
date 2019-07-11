@@ -34,7 +34,7 @@ class Net(nn.Module):
         if isinstance(m, nn.Conv2d):
             m.reset_parameters()
         if isinstance(m, nn.Linear):
-            torch.nn.init.xavier_uniform_(m.weight)
+            m.weight.data.fill_(0.01)
             m.bias.data.fill_(0.01)
         # net = nn.Sequential(nn.Linear(2, 2), nn.Linear(2, 2))
 
