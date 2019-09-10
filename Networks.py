@@ -3,7 +3,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torch
 from tensorboardX import SummaryWriter
-from adamw import AdamW
+
 
 
 class Net(nn.Module):

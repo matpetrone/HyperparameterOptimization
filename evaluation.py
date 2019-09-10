@@ -13,7 +13,7 @@ post_train_losses = []
 
 def evaluateBayes(learning_rate, weight_decay):
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
 
     model = Net().to(device)
 
@@ -25,12 +25,12 @@ def evaluateBayes(learning_rate, weight_decay):
 
 
 #Kriging Optimization
-sp = samplingplan(2)
+'''sp = samplingplan(2)
 X = sp.optimallhc(20)
 testfun = pyKriging.testfunctions().branin
 y = testfun(X)
 k = kriging(X,y, testfunction=-evaluateBayes, name='simple')
-k.train()
+k.train()'''
 
 
 
