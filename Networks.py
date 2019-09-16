@@ -79,7 +79,7 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
             running_loss += loss.item()
             train_loss += loss.item()
             num_minibatch += 1
-            if i % 100 == 99:  # print every 2000 mini-batches
+            if i % 200 == 199:  # print every 2000 mini-batches
                 print('[%d, %5d] loss: %.7f' %
                       (epoch + 1, i + 1, running_loss / 100))
                 print('Accuracy: %d %%' % (100*correct/total))
