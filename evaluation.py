@@ -6,7 +6,7 @@ import pyKriging
 from pyKriging.krige import kriging
 from pyKriging.samplingplan import samplingplan
 
-hyperpar_domains = {'learning_rate': (0.00001, 0.01), 'weight_decay': (0.000001, 0.1)}
+hyperpar_domains = {'learning_rate': (0.0001, 0.01), 'weight_decay': (0.000001, 0.1)}
 trainloader, validloader, _ = getSTL10(True)
 
 post_train_losses = []
