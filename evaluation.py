@@ -6,18 +6,18 @@ import pyKriging
 from pyKriging.krige import kriging
 from pyKriging.samplingplan import samplingplan
 
-hyperpar_domains = {'learning_rate': (0.0001, 0.01), 'weight_decay': (0.000001, 0.1)}
+hyperpar_domains = {'learning_rate': (0.0001, 0.01), 'weight_decay': (0.0001, 0.1)}
 trainloader, validloader, _ = getSTL10(True)
 
 post_train_losses = []
 
 def evaluateBayes(learning_rate, weight_decay):
 
-    device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
 
     model = Net().to(device)
 
-    _, validation_loss = train_eval_Net(model, 30, trainloader, validloader, learning_rate, weight_decay, device)
+    _, validation_loss = train_eval_Net(model, 80, trainloader, validloader, learning_rate, weight_decay, device)
 
     post_train_losses.append(validation_loss)
 
