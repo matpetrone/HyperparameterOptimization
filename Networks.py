@@ -46,11 +46,13 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=learn_rate, weight_decay=weight_decay)
     net.init_w() #initialization of every weights
-    net.train()
+    #net.train()
     tensorboard = SummaryWriter('runs/' + 'lr=' + str(learn_rate) + ',wd=' + str(weight_decay))
     for epoch in range(epochs):  # loop over the dataset multiple times
-        accuracy = []
-        losses = []
+        val_accuracy = []
+        val_losses = []
+        train_losses = []
+        train_acc = []
         total = 0
         correct = 0
         running_loss = 0.0
@@ -80,18 +82,20 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
             running_loss += loss.item()
             train_loss += loss.item()
             num_minibatch += 1
-            if i % 50 == 49:  # print every 2000 mini-batches
+            if i % 200 == 199:  # print every 2000 mini-batches
                 print('[%d, %5d] loss: %.7f' %
-                      (epoch + 1, i + 1, running_loss / 50))
+                      (epoch + 1, i + 1, running_loss / 200))
                 print('Accuracy: %d %%' % (100*correct/total))
                 running_loss = 0.0
 
         # Save Metrics
         _, validation_accuracy, validation_loss = valNet(net, validloader, device)
-        losses.append(validation_loss)
-        accuracy.append(validation_accuracy)
+        val_losses.append(validation_loss)
+        val_accuracy.append(validation_accuracy)
         train_loss /= num_minibatch
+        train_losses.append(train_loss)
         train_accuracy = 100 * correct/total
+        train_acc.append(train_accuracy)
 
         # print('Validation for Epoch n. %d:'%(epoch+1)+'loss:%.7f'%(validation_loss)+'acc:%d %%'%(validation_accuracy))
 
@@ -101,9 +105,11 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
         tensorboard.add_scalar('data/valid_loss', validation_loss)
         tensorboard.add_scalar('data/valid_acc', validation_accuracy)
     tensorboard.close()
-    final_loss = min(losses)
-    final_acc = max(accuracy)
-    return net, final_loss, final_acc
+    final_val_loss = min(val_losses)
+    final_val_acc = max(val_accuracy)
+    final_train_loss = min(train_losses)
+    final_train_acc = max(train_acc)
+    return net, final_val_loss, final_val_acc, final_train_loss, final_train_acc
 
 
 def valNet(net, validloader, device='cpu'):
@@ -127,5 +133,5 @@ def valNet(net, validloader, device='cpu'):
 
     accuracy = 100 * correct / total
     valid_loss /= num_minibatch
-    print('Accuracy of the network: %d %%' % accuracy+' Validation Loss: %.7f' % valid_loss)
+    #print('Accuracy of the network: %d %%' % accuracy+' Validation Loss: %.7f' % valid_loss)
     return net, accuracy, valid_loss
