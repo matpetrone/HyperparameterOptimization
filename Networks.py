@@ -112,7 +112,7 @@ def valNet(net, validloader, device='cpu'):
     total = 0
     num_minibatch = 0
     valid_loss = 0.0
-    net.eval()
+    #net.eval()
     with torch.no_grad():
         for data in validloader:
             images, labels = data
