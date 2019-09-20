@@ -17,7 +17,7 @@ def evaluateBayes(learning_rate, weight_decay):
 
     model = Net().to(device)
 
-    _, validation_loss = train_eval_Net(model, 80, trainloader, validloader, learning_rate, weight_decay, device)
+    _, validation_loss = train_eval_Net(model, 150, trainloader, validloader, learning_rate, weight_decay, device)
 
     post_train_losses.append(validation_loss)
 
