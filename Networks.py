@@ -45,11 +45,12 @@ class Net(nn.Module):
 def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_decay, device='cpu'):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=learn_rate, weight_decay=weight_decay)
-    net.init_w()
+    net.init_w() #initialization of every weights
     net.train()
     tensorboard = SummaryWriter('runs/' + 'lr=' + str(learn_rate) + ',wd=' + str(weight_decay))
     for epoch in range(epochs):  # loop over the dataset multiple times
         accuracy = []
+        losses = []
         total = 0
         correct = 0
         running_loss = 0.0
@@ -79,15 +80,16 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
             running_loss += loss.item()
             train_loss += loss.item()
             num_minibatch += 1
-            if i % 200 == 199:  # print every 2000 mini-batches
+            if i % 50 == 49:  # print every 2000 mini-batches
                 print('[%d, %5d] loss: %.7f' %
-                      (epoch + 1, i + 1, running_loss / 100))
+                      (epoch + 1, i + 1, running_loss / 50))
                 print('Accuracy: %d %%' % (100*correct/total))
                 running_loss = 0.0
 
         # Save Metrics
         _, validation_accuracy, validation_loss = valNet(net, validloader, device)
-        accuracy.append(validation_loss)
+        losses.append(validation_loss)
+        accuracy.append(validation_accuracy)
         train_loss /= num_minibatch
         train_accuracy = 100 * correct/total
 
@@ -99,8 +101,9 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
         tensorboard.add_scalar('data/valid_loss', validation_loss)
         tensorboard.add_scalar('data/valid_acc', validation_accuracy)
     tensorboard.close()
-    final_accuracy = min(accuracy)
-    return net, final_accuracy
+    final_loss = min(losses)
+    final_acc = max(accuracy)
+    return net, final_loss, final_acc
 
 
 def valNet(net, validloader, device='cpu'):
