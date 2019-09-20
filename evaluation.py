@@ -35,6 +35,6 @@ def evaluateBayes(learning_rate, weight_decay):
 #print('Result with Bayes Optimizer:'+str(opt_bys.max))
 device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
 model = Net().to(device)
-train_eval_Net(model, 100, trainloader, validloader, 0.0001, 0.1, device)
+train_eval_Net(model, 200, trainloader, validloader, 0.001, 0.01, device)
 print('vector of min loss for every iteration:'+post_train_losses)
 print('vector of max accuracy for every iteration:'+post_train_val)
