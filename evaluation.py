@@ -39,7 +39,7 @@ print('Result with Bayes Optimizer:'+str(opt_bys.max))
 #train_eval_Net(model, 200, trainloader, validloader, 0.0001, 0.0, device)
 print('vector of min train loss for every iteration:'+str(post_train_losses))
 print('vector of max train accuracy for every iteration:'+str(post_train_acc))
-print('vector of max validation loss for every iteration:'+str(post_val_losses))
+print('vector of min validation loss for every iteration:'+str(post_val_losses))
 print('vector of max validation accuracy for every iteration:'+str(post_val_acc))
 
 
