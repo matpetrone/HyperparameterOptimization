@@ -106,9 +106,11 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
         tensorboard.add_scalar('data/valid_acc', validation_accuracy)
     tensorboard.close()
     final_val_loss = min(val_losses)
-    final_val_acc = max(val_accuracy)
-    final_train_loss = min(train_losses)
-    final_train_acc = max(train_acc)
+    index = val_losses.index(final_val_loss)
+
+    final_val_acc = val_accuracy[index]
+    final_train_loss = train_losses[index]
+    final_train_acc = train_acc[index]
     return net, final_val_loss, final_val_acc, final_train_loss, final_train_acc
 
 
