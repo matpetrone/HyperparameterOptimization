@@ -100,10 +100,10 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
         # print('Validation for Epoch n. %d:'%(epoch+1)+'loss:%.7f'%(validation_loss)+'acc:%d %%'%(validation_accuracy))
 
         # Print tensorboard
-        tensorboard.add_scalar('data/train_loss', train_loss)
-        tensorboard.add_scalar('data/train_acc', train_accuracy)
-        tensorboard.add_scalar('data/valid_loss', validation_loss)
-        tensorboard.add_scalar('data/valid_acc', validation_accuracy)
+        tensorboard.add_scalar('data/train_loss', train_loss, epoch)
+        tensorboard.add_scalar('data/train_acc', train_accuracy, epoch)
+        tensorboard.add_scalar('data/valid_loss', validation_loss, epoch)
+        tensorboard.add_scalar('data/valid_acc', validation_accuracy, epoch)
     tensorboard.export_scalars_to_json("./all_scalars.json")
     tensorboard.close()
     final_val_loss = min(val_losses)
