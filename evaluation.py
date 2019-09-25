@@ -11,6 +11,7 @@ post_train_acc = []
 post_val_losses = []
 post_val_acc = []
 
+
 def evaluateBayes(learning_rate, weight_decay):
 
     device = torch.device("cuda:5" if torch.cuda.is_available() else "cpu")
@@ -34,6 +35,7 @@ def evaluateBayes(learning_rate, weight_decay):
 opt_bys = BayesianOptimization(f=evaluateBayes, pbounds=hyperpar_domains)
 opt_bys.maximize(3, 30)
 print('Result with Bayes Optimizer:'+str(opt_bys.max))
+
 #device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
 #model = Net().to(device)
 #train_eval_Net(model, 200, trainloader, validloader, 0.0001, 0.0, device)

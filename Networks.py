@@ -82,7 +82,7 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
             running_loss += loss.item()
             train_loss += loss.item()
             num_minibatch += 1
-            if i % 200 == 199:  # print every 2000 mini-batches
+            if i % 200 == 199:  # print every 200 mini-batches
                 print('[%d, %5d] loss: %.7f' %
                       (epoch + 1, i + 1, running_loss / 200))
                 print('Accuracy: %d %%' % (100*correct/total))
@@ -104,10 +104,10 @@ def train_eval_Net(net, epochs, trainloader, validloader, learn_rate, weight_dec
         tensorboard.add_scalar('data/train_acc', train_accuracy)
         tensorboard.add_scalar('data/valid_loss', validation_loss)
         tensorboard.add_scalar('data/valid_acc', validation_accuracy)
+    tensorboard.export_scalars_to_json("./all_scalars.json")
     tensorboard.close()
     final_val_loss = min(val_losses)
     index = val_losses.index(final_val_loss)
-
     final_val_acc = val_accuracy[index]
     final_train_loss = train_losses[index]
     final_train_acc = train_acc[index]
