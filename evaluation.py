@@ -3,7 +3,7 @@ import torch
 from Networks import train_eval_Net, Net
 from data import getSTL10
 
-hyperpar_domains = {'learning_rate': (0.00001, 0.001), 'weight_decay': (0.00001, 0.001)}
+hyperpar_domains = {'learning_rate': (0.00001, 0.001), 'weight_decay': (0.0, 0.001)}
 trainloader, validloader, _ = getSTL10(True)
 
 post_train_losses = []
