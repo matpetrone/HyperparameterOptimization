@@ -3,7 +3,7 @@ import torch
 from Networks import train_eval_Net, Net
 from data import getSTL10
 
-hyperpar_domains = {'learning_rate': (0.0001, 0.01), 'weight_decay': (0.0, 0.001)}
+hyperpar_domains = {'learning_rate': (0.00001, 0.001), 'weight_decay': (0.00001, 0.001)}
 trainloader, validloader, _ = getSTL10(True)
 
 post_train_losses = []
@@ -18,7 +18,7 @@ def evaluateBayes(learning_rate, weight_decay):
 
     model = Net().to(device)
 
-    _, validation_loss, validation_acc, train_loss, train_acc = train_eval_Net(model, 80, trainloader, validloader, learning_rate, weight_decay, device)
+    _, validation_loss, validation_acc, train_loss, train_acc = train_eval_Net(model, 150, trainloader, validloader, learning_rate, weight_decay, device)
 
     post_train_losses.append(train_loss)
     post_train_acc.append(train_acc)
@@ -33,7 +33,7 @@ def evaluateBayes(learning_rate, weight_decay):
 
 # Bayesian Optimization
 opt_bys = BayesianOptimization(f=evaluateBayes, pbounds=hyperpar_domains)
-opt_bys.maximize(3, 30)
+opt_bys.maximize(init_points=5, n_iter=25)
 print('Result with Bayes Optimizer:'+str(opt_bys.max))
 
 #device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
