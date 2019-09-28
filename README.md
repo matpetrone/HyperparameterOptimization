@@ -1,4 +1,4 @@
-# HyperparameterOptimization
+# Bayesian Hyperparameter Optimization
 A Project with the purpose to optimize hyperparameters in a Neural Network using Bayesian optimization
 
 ## Getting Started
