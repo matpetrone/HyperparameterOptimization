@@ -25,7 +25,7 @@ def evaluateBayes(learning_rate, weight_decay):
     post_val_losses.append(validation_loss)
     post_val_acc.append(validation_acc)
 
-    return -validation_loss
+    return -validation_loss  #We need to minimize, however this method is a maximizer
 
 
 
@@ -36,9 +36,7 @@ opt_bys = BayesianOptimization(f=evaluateBayes, pbounds=hyperpar_domains)
 opt_bys.maximize(init_points=5, n_iter=25)
 print('Result with Bayes Optimizer:'+str(opt_bys.max))
 
-#device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
-#model = Net().to(device)
-#train_eval_Net(model, 200, trainloader, validloader, 0.0001, 0.0, device)
+#Print result of each training & validation process
 print('vector of min train loss for every iteration:'+str(post_train_losses))
 print('vector of max train accuracy for every iteration:'+str(post_train_acc))
 print('vector of min validation loss for every iteration:'+str(post_val_losses))
